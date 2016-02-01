@@ -1,14 +1,19 @@
 package com.udacity.gradle.builditbigger;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+
+import com.denis.home.JokeActivity;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements EndpointsAsyncTask.IResponse {
+
+    private final String LOG_TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +45,26 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void tellJoke(View view){
-        Toast.makeText(this, "derp", Toast.LENGTH_SHORT).show();
+
+        //String jokeText = new JokeSource().getJoke();
+        //"derp"
+
+        //new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "Manfred"));
+        EndpointsAsyncTask endpointsAsyncTask = new EndpointsAsyncTask();
+        endpointsAsyncTask.delegate = this;
+        //endpointsAsyncTask.execute(new Pair<Context, String>(this, jokeText));
+        // TODO: add Loading Indicator
+        endpointsAsyncTask.execute(this);
+
+        //Toast.makeText(this, jokeText, Toast.LENGTH_SHORT).show();
+/*        Intent intent = new Intent(this, JokeActivity.class).putExtra(JokeActivity.EXTRA_JOKE_TO_SHOW, jokeText);
+        startActivity(intent);*/
     }
 
-
+    @Override
+    public void postResult(String asyncResult){
+        Log.i(LOG_TAG, "get resault from async task: " + asyncResult);
+        Intent intent = new Intent(this, JokeActivity.class).putExtra(JokeActivity.EXTRA_JOKE_TO_SHOW, asyncResult);
+        startActivity(intent);
+    }
 }
