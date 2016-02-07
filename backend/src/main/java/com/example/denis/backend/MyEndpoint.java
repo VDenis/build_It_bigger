@@ -38,11 +38,11 @@ public class MyEndpoint {
     @ApiMethod(name = "sayJoke")
     public MyBean sayJoke() {
         MyBean response = new MyBean();
-        try {
+/*        try {
             Thread.sleep(10000);
         } catch (InterruptedException ex) {
 
-        }
+        }*/
         JokeSource jokeSource = new JokeSource();
         response.setData(jokeSource.getJoke());
 

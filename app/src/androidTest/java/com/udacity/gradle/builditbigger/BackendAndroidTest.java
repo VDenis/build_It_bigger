@@ -14,7 +14,8 @@ public class BackendAndroidTest extends AndroidTestCase implements EndpointsAsyn
     public void testNotNullJokeTest() throws Exception {
         Log.i(LOG_TAG, "Run Async Task");
         EndpointsAsyncTask endpointsAsyncTask = new EndpointsAsyncTask(getContext(), this);
-        endpointsAsyncTask.execute().get(15, TimeUnit.SECONDS);
+        //endpointsAsyncTask.execute().get(15, TimeUnit.SECONDS);
+        endpointsAsyncTask.execute().get(2, TimeUnit.SECONDS);
     }
 
     @Override

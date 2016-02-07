@@ -9,18 +9,42 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.denis.home.JokeActivity;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 
 
 public class MainActivity extends ActionBarActivity implements EndpointsAsyncTask.IResponse {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
+    InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getString(R.string.full_screen_ad_unit_id));
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                requestNewInterstitial();
+                startJokeActivity();
+            }
+        });
+
+        requestNewInterstitial();
     }
 
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(getString(R.string.device_id))
+                .build();
+
+        mInterstitialAd.loadAd(adRequest);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -44,24 +68,33 @@ public class MainActivity extends ActionBarActivity implements EndpointsAsyncTas
         return super.onOptionsItemSelected(item);
     }
 
-    public void tellJoke(View view){
+    public void tellJoke(View view) {
 
         //String jokeText = new JokeSource().getJoke();
         //"derp"
-
-        //new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "Manfred"));
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        } else {
+            startJokeActivity();
+        }
+/*        //new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "Manfred"));
         EndpointsAsyncTask endpointsAsyncTask = new EndpointsAsyncTask(this, this);
         //endpointsAsyncTask.execute(new Pair<Context, String>(this, jokeText));
         // TODO: add Loading Indicator
-        endpointsAsyncTask.execute();
+        endpointsAsyncTask.execute();*/
 
         //Toast.makeText(this, jokeText, Toast.LENGTH_SHORT).show();
 /*        Intent intent = new Intent(this, JokeActivity.class).putExtra(JokeActivity.EXTRA_JOKE_TO_SHOW, jokeText);
         startActivity(intent);*/
     }
 
+    private void startJokeActivity() {
+        EndpointsAsyncTask endpointsAsyncTask = new EndpointsAsyncTask(this, this);
+        endpointsAsyncTask.execute();
+    }
+
     @Override
-    public void postResult(String asyncResult){
+    public void postResult(String asyncResult) {
         Log.i(LOG_TAG, "get resault from async task: " + asyncResult);
         Intent intent = new Intent(this, JokeActivity.class).putExtra(JokeActivity.EXTRA_JOKE_TO_SHOW, asyncResult);
         startActivity(intent);
