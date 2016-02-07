@@ -50,11 +50,10 @@ public class MainActivity extends ActionBarActivity implements EndpointsAsyncTas
         //"derp"
 
         //new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "Manfred"));
-        EndpointsAsyncTask endpointsAsyncTask = new EndpointsAsyncTask();
-        endpointsAsyncTask.delegate = this;
+        EndpointsAsyncTask endpointsAsyncTask = new EndpointsAsyncTask(this, this);
         //endpointsAsyncTask.execute(new Pair<Context, String>(this, jokeText));
         // TODO: add Loading Indicator
-        endpointsAsyncTask.execute(this);
+        endpointsAsyncTask.execute();
 
         //Toast.makeText(this, jokeText, Toast.LENGTH_SHORT).show();
 /*        Intent intent = new Intent(this, JokeActivity.class).putExtra(JokeActivity.EXTRA_JOKE_TO_SHOW, jokeText);

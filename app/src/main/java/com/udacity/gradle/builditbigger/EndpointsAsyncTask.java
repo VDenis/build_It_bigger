@@ -23,24 +23,26 @@ public class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
     public interface IResponse {
         void postResult(String asyncresult);
     }
+
     // Callback
-    public IResponse delegate=null;
+    private IResponse mResponse = null;
 
     private static MyApi myApiService = null;
-    public Context mContext;
+    private Context mContext;
 
 /*    public EndpointsAsyncTask(Context context) {
         mContext = context;
     } */
 
-    public EndpointsAsyncTask() {
-
+    public EndpointsAsyncTask(Context context, IResponse response) {
+        mContext = context;
+        mResponse = response;
     }
 
     @Override
     //protected String doInBackground(Pair<Context, String>... params) {
     protected String doInBackground(Context... params) {
-        if(myApiService == null) {  // Only do this once
+        if (myApiService == null) {  // Only do this once
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
                     // options for running against local devappserver
@@ -58,7 +60,7 @@ public class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
             myApiService = builder.build();
         }
 
-        mContext = params[0];
+        //mContext = params[0];
 /*        mContext = params[0].first;
         String name = params[0].second;*/
 
@@ -75,15 +77,12 @@ public class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
     protected void onPostExecute(String s) {
         //Toast.makeText(mContext, s, Toast.LENGTH_LONG).show();
         //super.onPostExecute(s);
-        if(delegate!=null)
-        {
+        if (mResponse != null) {
             // TODO: If error, return "failed to connect to /10.0.2.2 (port 8080) after 20000ms"
             // or + Network is unreachable
-            delegate.postResult(s);
-        }
-        else
-        {
-            Log.e(LOG_TAG, "You have not assigned IResponse delegate");
+            mResponse.postResult(s);
+        } else {
+            Log.e(LOG_TAG, "You have not assigned IResponse mResponse");
         }
     }
 }
