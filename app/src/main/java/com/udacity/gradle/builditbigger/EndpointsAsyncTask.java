@@ -28,14 +28,12 @@ public class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
     private IResponse mResponse = null;
 
     private static MyApi myApiService = null;
-    private Context mContext;
 
 /*    public EndpointsAsyncTask(Context context) {
         mContext = context;
     } */
 
-    public EndpointsAsyncTask(Context context, IResponse response) {
-        mContext = context;
+    public EndpointsAsyncTask(IResponse response) {
         mResponse = response;
     }
 
@@ -67,6 +65,7 @@ public class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
         try {
             //return myApiService.sayHi(name).execute().getData();
             return myApiService.sayJoke().execute().getData();
+            //return myApiService.tellJoke().execute().getData();
         } catch (IOException e) {
             return e.getMessage();
         }
