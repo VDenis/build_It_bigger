@@ -17,3 +17,19 @@ allprojects {
         jcenter()
     }
 }
+
+evaluationDependsOn ":app"
+evaluationDependsOn ":backend"
+
+project(":backend"){
+    appengine {
+        daemon true
+    }
+}
+
+tasks.getByPath(":app:connectedCheck").mustRunAfter tasks.getByPath(":backend:appengineRun")
+tasks.getByPath(":backend:appengineStop").mustRunAfter tasks.getByPath(":app:connectedCheck")
+
+task endpointsTest {
+    dependsOn ":backend:appengineRun", ":app:connectedCheck", ":backend:appengineStop"
+}

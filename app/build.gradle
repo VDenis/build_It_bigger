@@ -24,6 +24,19 @@ android {
         }
     }
 
+    productFlavors {
+        free {
+            applicationId "com.udacity.gradle.builditbigger.free"
+        }
+        paid {
+            applicationId "com.udacity.gradle.builditbigger.paid"
+        }
+    }
+    sourceSets {
+        free {
+            manifest.srcFile 'src/free/AndroidManifest.xml'
+        }
+    }
     dexOptions {
         javaMaxHeapSize "4g"
     }
@@ -33,7 +46,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     // Added for AdMob
     //compile 'com.google.android.gms:play-services:8.4.0'
-    compile 'com.google.android.gms:play-services-ads:8.4.0'
+    freeCompile 'com.google.android.gms:play-services-ads:8.4.0'
 
     // Java library jokeSource
     //compile project(':jokesource')
