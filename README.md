@@ -1,7 +1,6 @@
 
-# Gradle for Android and Java Final Project:
 # Build It Bigger
-
+Gradle for Android and Java Final Project:
 ## Android Developer Nanodegree
 
 In this project, you will create an app with multiple flavors that uses
